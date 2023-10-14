@@ -4,6 +4,7 @@ ENV QQnum 2186345636
 ENV QQpasswd ''
 ENV groupNum 865727299
 ENV gameId 3
+ENV url http://nbal.nuc.edu.cn
 
 WORKDIR /app
 
@@ -24,4 +25,4 @@ RUN chmod 777 start.sh && \
 
 EXPOSE 5700
 
-CMD ./start.sh $groupNum $gameId
+CMD ./start.sh $url $groupNum $gameId
