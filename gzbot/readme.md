@@ -8,16 +8,13 @@
 
 ## 配置方法
 
-### docker env
+### docker env参数
 
-- QQ号：QQnum
-- QQ密码：QQpasswd（有些特殊字符需用`\`转义）
-- 通知群号groupNum
-- 比赛号（例如3）：gameId
-
-### start.sh
-
-python3 gzbot --url="靶场url" ………………
+- QQnum：QQ号
+- QQpasswd：QQ密码（有些特殊字符需用`\`转义）
+- groupNum：通知群号
+- gameId：比赛号（例如3）
+- url：靶场url
 
 ## 文件映射
 
