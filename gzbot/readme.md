@@ -1,14 +1,13 @@
 # GZbot
 
 - 基于qsign镜像进行构建
-
 - 使用`go-cqhttp`作为qq服务应用
-
 - 使用修改后的gzbot.py获取gz信息并发送给go-cqhttp
+- 使用event.py推送正在报名的ctf比赛([三哈](https://www.su-sanha.cn/events/)提供api)
 
 ## 配置方法
 
-### docker env参数
+### ***docker env参数(必选)
 
 - QQnum：QQ号
 - QQpasswd：QQ密码（有些特殊字符需用`\`转义）
