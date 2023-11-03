@@ -1,17 +1,23 @@
-FROM ghcr.io/fuqiuluo/unidbg-fetch-qsign:master
+FROM xzhouqd/qsign:core-1.1.9
+# FROM ghcr.io/fuqiuluo/unidbg-fetch-qsign:master
 
+ENV BASE_PATH /srv/qsign/qsign/txlib/8.9.73
 ENV QQnum 2186345636
 ENV QQpasswd ''
 ENV groupNum 865727299
 ENV gameId 3
 ENV url http://nbal.nuc.edu.cn
+VOLUME [ "/srv/gzbot/logs", "/srv/gzbot/session.token" ]
 
-WORKDIR /app
+WORKDIR /srv
 
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 
 RUN apt update -y
-RUN apt install python3 python3-pip -y --fix-missing
+RUN apt install systemctl cron python3 python3-pip -y --fix-missing
 
 RUN mkdir gzbot
 COPY gzbot gzbot
@@ -19,10 +25,19 @@ RUN pip install -r gzbot/requirements.txt
 COPY go-cqhttp.deb .
 RUN apt install ./go-cqhttp.deb -y
 COPY start.sh .
+COPY root /var/spool/cron/crontabs
 
 RUN chmod 777 start.sh && \
+    chmod 600 /var/spool/cron/crontabs/root && \
+    sed -i "s/\"auto_register\": false/\"auto_register\": true/" ./qsign/qsign/txlib/8.9.73/config.json && \
     sed -i "s/QQnum/$QQnum/g" ./gzbot/config.yml
 
+# ubuntu add
+COPY qsign.service /etc/systemd/system
+RUN chmod 644 /etc/systemd/system/qsign.service && \
+    systemctl daemon-reload && \
+    systemctl enable qsign
+# addition
 EXPOSE 5700
 
-CMD ./start.sh $url $groupNum $gameId
+ENTRYPOINT ./start.sh $url $groupNum $gameId

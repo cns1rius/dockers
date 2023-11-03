@@ -1,0 +1,13 @@
+[Unit]
+Description=unidbg-fetch-qsign
+After=network.target
+
+[Service]
+Environment="JAVA_HOME=/opt/java/openjdk"
+WorkingDirectory=/srv/qsign/qsign
+ExecStart=/srv/qsign/qsign/bin/unidbg-fetch-qsign --basePath=/srv/qsign/qsign/txlib/8.9.73
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
