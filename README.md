@@ -7,7 +7,7 @@ Source to build docker images
 
 其他镜像：[我的dockerhub](https://hub.docker.com/u/cns1rius)
 
-(由于时间和技术限制只有一些中低难度的ctf题目，也有部分大赛题目复现镜像，hub内有全部镜像)
+(本仓库仅存有部分ctf题目及大赛题目复现镜像，dockerhub内有全部镜像)
 
 所有镜像禁止商用！
 
