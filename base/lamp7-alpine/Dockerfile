@@ -1,16 +1,21 @@
 FROM alpine:3.15
 
-ENV TIMEZONE Asia/Shanghai
-ENV MYSQL_ROOT_PASSWORD root
+ENV TIMEZONE=Asia/Shanghai
+ENV MYSQL_ROOT_PASSWORD=root
 
 RUN apk update && apk upgrade
-RUN apk add mariadb mariadb-client \
+RUN apk add --no-cache mariadb mariadb-client \
     apache2 \ 
     apache2-utils \
     curl wget \
+    gcc musl-dev make \
+    autoconf \
     tzdata \
     php7-apache2 \
     php7-cli \
+    php7-pear \
+    php7 \
+    php7-dev \
     php7-phar \
     php7-zlib \
     php7-zip \
@@ -32,7 +37,8 @@ RUN apk add mariadb mariadb-client \
     php7-apcu \
     php7-opcache \
     php7-tokenizer \
-    php7-simplexml
+    php7-simplexml \
+    memcached
 
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin --filename=composer
@@ -40,6 +46,11 @@ RUN curl -sS https://getcomposer.org/installer | \
 #    sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
 #    sed -i 's#Require all denied#Require all granted#' /etc/apache2/httpd.conf && \
 #    sed -i 's#^DocumentRoot ".*#DocumentRoot "/var/www/localhost/htdocs"#g' /etc/apache2/httpd.conf && \
+
+RUN pecl install memcache-4.0.5.2 && \
+    echo "extension=memcache.so" > /etc/php7/conf.d/00_memcache.ini
+
+
 
 # configure timezone, mysql, apache
 RUN cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
